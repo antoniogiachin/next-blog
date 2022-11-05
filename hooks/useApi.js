@@ -1,11 +1,13 @@
 import { useState } from "react";
+// REDUX
+import { SET_LOADING_STATUS, SET_ERROR } from "../store/slicers/appStatusSlice";
+import { useDispatch } from "react-redux";
 
 export const useApi = () => {
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const getApi = async (path) => {
-    setIsLoading(true);
+    dispatch(SET_LOADING_STATUS(true));
     let data;
     try {
       const response = await fetch(path);
@@ -17,16 +19,17 @@ export const useApi = () => {
       }
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
-      setError(err);
+      dispatch(SET_LOADING_STATUS(false));
+      dispatch(SET_ERROR(err));
     }
 
-    setIsLoading(false);
+    dispatch(SET_LOADING_STATUS(false));
+
     return data;
   };
 
   const postApi = async (path, payload) => {
-    setIsLoading(true);
+    dispatch(SET_LOADING_STATUS(true));
     let data;
     try {
       const response = await fetch(path, {
@@ -44,16 +47,16 @@ export const useApi = () => {
       }
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
-      setError(err);
+      dispatch(SET_LOADING_STATUS(false));
+      dispatch(SET_ERROR(err));
     }
 
-    setIsLoading(false);
+    dispatch(SET_LOADING_STATUS(false));
     return data;
   };
 
   const putApi = async (path, payload, pathVar) => {
-    setIsLoading(true);
+    dispatch(SET_LOADING_STATUS(true));
     let data;
     try {
       const response = await fetch(`${path}/${pathVar}`, {
@@ -71,16 +74,16 @@ export const useApi = () => {
       }
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
-      setError(err);
+      dispatch(SET_LOADING_STATUS(false));
+      dispatch(SET_ERROR(err));
     }
 
-    setIsLoading(false);
+    dispatch(SET_LOADING_STATUS(false));
     return data;
   };
 
   const deleteApi = async (path, pathVar) => {
-    setIsLoading(true);
+    dispatch(SET_LOADING_STATUS(true));
     let data;
     try {
       const response = await fetch(`${path}/${pathVar}`, {
@@ -97,11 +100,11 @@ export const useApi = () => {
       }
     } catch (err) {
       console.log(err);
-      setIsLoading(false);
-      setError(err);
+      dispatch(SET_LOADING_STATUS(false));
+      dispatch(SET_ERROR(err));
     }
 
-    setIsLoading(false);
+    dispatch(SET_LOADING_STATUS(false));
     return data;
   };
 

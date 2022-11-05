@@ -86,13 +86,11 @@ export default async function handler(req, res) {
         .status(500)
         .json({ success: false, message: "Something went wrong!" });
     } else {
-      res
-        .status(201)
-        .json({
-          success: true,
-          message: `Welcome aboard ${name} ${surname}!`,
-          newUser: newUser,
-        });
+      res.status(201).json({
+        success: true,
+        message: `Welcome aboard ${name} ${surname}!`,
+        newUser: newUser,
+      });
     }
   }
 }
