@@ -62,10 +62,9 @@ export const RegisterForm = () => {
       confirmPassword: confirmPassword.current.value,
     };
 
-    const result = await postApi("/api/user/register", newUser);
-    // fare signin next auth
-    if (result) {
+    try {
       dispatch(SET_LOADING_STATUS(true));
+      const result = await postApi("/api/user/register", newUser);
       console.log(result, "RESULT REGISTER");
       const loginResult = await signIn("credentials", {
         redirect: false,
@@ -80,6 +79,9 @@ export const RegisterForm = () => {
         dispatch(SET_LOADING_STATUS(false));
         router.replace("/");
       }
+    } catch (err) {
+      dispatch(SET_LOADING_STATUS(false));
+      dispatch(SET_ERROR(err));
     }
   };
 

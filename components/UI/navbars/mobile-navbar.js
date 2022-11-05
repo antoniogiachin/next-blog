@@ -15,7 +15,6 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
   const [showSidebar, setShowSidebar] = useState();
 
   const { data: session, loading } = useSession();
-  console.log(session);
 
   const handleSidebarShow = (mode = "simple") => {
     if (mode !== "simple" && showSidebar === "show") {
@@ -75,28 +74,41 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
               Posts
             </Link>
           </li>
-          <li>
-            <Link href="/">Dashboard</Link>
-          </li>
-          <li>
-            <Link
-              onClick={() => {
-                handleSidebarShow();
-              }}
-              href="/auth/login"
-            >
-              Login
-            </Link>
-          </li>
-          <li>
-            <span
-              onClick={() => {
-                handleSidebarShow("logout");
-              }}
-            >
-              Logout
-            </span>
-          </li>
+          {session && (
+            <li>
+              <Link
+                onClick={() => {
+                  handleSidebarShow();
+                }}
+                href="/"
+              >
+                Dashboard
+              </Link>
+            </li>
+          )}
+          {!session && (
+            <li>
+              <Link
+                onClick={() => {
+                  handleSidebarShow();
+                }}
+                href="/auth/login"
+              >
+                Login
+              </Link>
+            </li>
+          )}
+          {session && (
+            <li>
+              <span
+                onClick={() => {
+                  handleSidebarShow("logout");
+                }}
+              >
+                Logout
+              </span>
+            </li>
+          )}
           <li>
             <div
               onClick={toggleDarkMode}

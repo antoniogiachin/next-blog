@@ -3,12 +3,12 @@ import Link from "next/link";
 import classes from "./desktop-navbar.module.css";
 
 // NEXT AUTH
-import { signOut } from "next-auth/react"
+import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 
 export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
   const { data: session, loading } = useSession();
-  console.log(session);
+  
   const handleLogout = () => {
     signOut();
   };
@@ -23,15 +23,21 @@ export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
           <li>
             <Link href="/posts">Posts</Link>
           </li>
-          <li>
-            <Link href="/">Dashboard</Link>
-          </li>
-          <li>
-            <Link href="/auth/login">Login</Link>
-          </li>
-          <li>
-            <span onClick={handleLogout}>Logout</span>
-          </li>
+          {session && (
+            <li>
+              <Link href="/">Dashboard</Link>
+            </li>
+          )}
+          {!session && (
+            <li>
+              <Link href="/auth/login">Login</Link>
+            </li>
+          )}
+          {session && (
+            <li>
+              <span onClick={handleLogout}>Logout</span>
+            </li>
+          )}
         </ul>
       </nav>
       <nav>

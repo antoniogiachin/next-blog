@@ -40,19 +40,24 @@ export const LoginForm = () => {
       return;
     }
 
-    dispatch(SET_LOADING_STATUS(true));
-    const loginResult = await signIn("credentials", {
-      redirect: false,
-      email: email.current.value,
-      password: password.current.value,
-    });
+    try {
+      dispatch(SET_LOADING_STATUS(true));
+      const loginResult = await signIn("credentials", {
+        redirect: false,
+        email: email.current.value,
+        password: password.current.value,
+      });
 
-    if (loginResult.error) {
+      if (loginResult.error) {
+        dispatch(SET_LOADING_STATUS(false));
+        dispatch(SET_ERROR(loginResult.error));
+      } else {
+        dispatch(SET_LOADING_STATUS(false));
+        router.replace("/");
+      }
+    } catch (err) {
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(loginResult.error));
-    } else {
-      dispatch(SET_LOADING_STATUS(false));
-      router.replace("/");
+      dispatch(SET_ERROR(err));
     }
   };
 
