@@ -1,0 +1,9 @@
+.posts-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+}
+
+.posts-card-container > * {
+  flex-grow: 1;
+}

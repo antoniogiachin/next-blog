@@ -1,0 +1,120 @@
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--rounded-md);
+  text-transform: uppercase;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-xs);
+  gap: 0.5rem;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.button:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+.button:disabled {
+  border-color: rgba(27, 31, 35, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: default;
+}
+
+.button:active {
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
+
+.button-success {
+  background-color: var(--color-success-300);
+}
+.button-danger {
+  background-color: var(--color-danger-300);
+  color: #ccc;
+}
+.button-info {
+  background-color: var(--color-info-300);
+}
+.button-secondary {
+  background-color: var(--color-gray-300);
+}
+
+.button-success:hover {
+  background-color: var(--color-success-500);
+}
+.button-danger:hover {
+  background-color: var(--color-danger-500);
+}
+.button-info:hover {
+  background-color: var(--color-info-500);
+}
+.button-secondary:hover {
+  background-color: var(--color-gray-500);
+}
+
+.button-success:focus {
+  box-shadow: var(--color-success-800) 0 0 0 3px;
+  outline: none;
+}
+.button-danger:focus {
+  box-shadow: var(--color-danger-800) 0 0 0 3px;
+  outline: none;
+}
+.button-info:focus {
+  box-shadow: var(--color-info-800) 0 0 0 3px;
+  outline: none;
+}
+.button-secondary:focus {
+  box-shadow: var(--color-gray-800) 0 0 0 3px;
+  outline: none;
+}
+
+.button-success:disabled {
+  background-color: var(--color-success-100);
+}
+.button-danger:disabled {
+  background-color: var(--color-danger-100);
+}
+.button-info:disabled {
+  background-color: var(--color-info-100);
+}
+.button-secondary:disabled {
+  background-color: var(--color-gray-100);
+}
+
+.button-success:active {
+  background-color: var(--color-success-500);
+}
+.button-danger:active {
+  background-color: var(--color-danger-500);
+}
+.button-info:active {
+  background-color: var(--color-info-500);
+}
+.button-secondary:active {
+  background-color: var(--color-gray-500);
+}

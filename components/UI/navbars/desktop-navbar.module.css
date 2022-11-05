@@ -1,0 +1,97 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.header h1 {
+  font-size: var(--font-4xl);
+}
+
+.header nav ul {
+  display: flex;
+  gap: 3rem;
+  font-size: var(--font-md);
+  text-transform: uppercase;
+}
+.header nav ul li {
+  padding: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.header nav ul li:hover {
+  animation: border 0.5s infinite;
+  animation-direction: alternate-reverse;
+}
+
+.toggler {
+  border-radius: 4rem;
+  width: 4rem;
+  display: flex;
+  cursor: pointer;
+}
+
+.toggler:active {
+  animation: toggler 0.1s linear;
+}
+
+.toggler.dark {
+  background-color: var(--color-primary-800);
+  justify-content: end;
+}
+
+.toggler.light {
+  background-color: var(--color-primary-100);
+  justify-content: start;
+}
+
+.toggler .button {
+  background-color: var(--color-primary-500);
+  padding: 1rem;
+  border-radius: 4rem;
+}
+
+@keyframes border {
+  from {
+    border-bottom: 1px solid var(--color-primary-text);
+    border-top: 1px solid var(--color-primary-text);
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+  }
+
+  to {
+    border-left: 1px solid var(--color-primary-text);
+    border-right: 1px solid var(--color-primary-text);
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+  }
+}
+
+@keyframes toggler {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.3;
+  }
+}
+
+@media (max-width: 920px) {
+  .header h1 {
+    font-size: var(--font-2xl);
+  }
+}
+
+@media (max-width: 760px) {
+  .header h1 {
+    font-size: var(--font-xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    display: none;
+  }
+}
