@@ -4,13 +4,20 @@ import classes from "./register-form.module.css";
 
 import { faUserLock } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from "react";
+import { useRouter } from "next/router";
 
 // REDUX
-import {
-  SET_LOADING_STATUS,
-  SET_ERROR,
-} from "../../store/slicers/appStatusSlice";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  SET_ERROR,
+  SET_LOADING_STATUS,
+} from "../../store/slicers/appStatusSlice";
+
+// API HOOK
+import { useApi } from "../../hooks/useApi";
+
+// NEXT AUTH
+import { signIn } from "next-auth/react";
 
 export const RegisterForm = () => {
   const name = useRef();
@@ -20,6 +27,8 @@ export const RegisterForm = () => {
   const confirmPassword = useRef();
 
   const dispatch = useDispatch();
+  const { postApi } = useApi();
+  const router = useRouter();
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -29,18 +38,48 @@ export const RegisterForm = () => {
     const PWD_REGEX = /[0-9a-zA-Z]{6,}/;
 
     if (!EMAIL_REGEX.test(email.current.value)) {
-      alert("invalid email");
+      dispatch(SET_ERROR("Please Provide a valid email address!"));
       return;
     }
 
     if (!PWD_REGEX.test(password.current.value)) {
-      alert("invalid password");
+      dispatch(
+        SET_ERROR("Please Provide a valid password (min 6 char length)")
+      );
       return;
     }
 
     if (!password !== !confirmPassword) {
-      alert("invalid password");
+      dispatch(SET_ERROR("The passwords are different!"));
       return;
+    }
+
+    const newUser = {
+      name: name.current.value,
+      surname: surname.current.value,
+      email: email.current.value,
+      password: password.current.value,
+      confirmPassword: confirmPassword.current.value,
+    };
+
+    const result = await postApi("/api/user/register", newUser);
+    // fare signin next auth
+    if (result) {
+      dispatch(SET_LOADING_STATUS(true));
+      console.log(result, "RESULT REGISTER");
+      const loginResult = await signIn("credentials", {
+        redirect: false,
+        email: newUser.email,
+        password: newUser.password,
+      });
+
+      if (loginResult.error) {
+        dispatch(SET_LOADING_STATUS(false));
+        dispatch(SET_ERROR(loginResult.error));
+      } else {
+        dispatch(SET_LOADING_STATUS(false));
+        router.replace("/");
+      }
     }
   };
 

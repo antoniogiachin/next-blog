@@ -108,5 +108,5 @@ export const useApi = () => {
     return data;
   };
 
-  return { isLoading, error, getApi, postApi, putApi, deleteApi };
+  return { getApi, postApi, putApi, deleteApi };
 };

@@ -73,6 +73,7 @@ export default async function handler(req, res) {
     const exist = await db.collection("users").findOne({ email });
 
     if (exist) {
+      client.close();
       res.status(422).json({ success: false, message: "User already exist!" });
       return;
     }
@@ -82,10 +83,12 @@ export default async function handler(req, res) {
     newUser.id = result.insertedId;
 
     if (!result) {
+      client.close();
       res
         .status(500)
         .json({ success: false, message: "Something went wrong!" });
     } else {
+      client.close();
       res.status(201).json({
         success: true,
         message: `Welcome aboard ${name} ${surname}!`,

@@ -7,12 +7,22 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./mobile-navbar.module.css";
 
+// NEXT AUTH
+import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+
 export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
   const [showSidebar, setShowSidebar] = useState();
+
+  const { data: session, loading } = useSession();
+  console.log(session);
 
   const handleSidebarShow = (mode = "simple") => {
     if (mode !== "simple" && showSidebar === "show") {
       setShowSidebar("hide");
+      if (mode === "logout") {
+        signOut();
+      }
       return;
     } else if (mode !== "simple" && !showSidebar) {
       return;
@@ -79,14 +89,13 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
             </Link>
           </li>
           <li>
-            <Link
+            <span
               onClick={() => {
-                handleSidebarShow();
+                handleSidebarShow("logout");
               }}
-              href="/"
             >
               Logout
-            </Link>
+            </span>
           </li>
           <li>
             <div

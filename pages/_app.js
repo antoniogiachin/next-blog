@@ -6,20 +6,25 @@ import Head from "next/head";
 import { store } from "../store/store";
 import { Provider } from "react-redux";
 
-function MyApp({ Component, pageProps }) {
+// NEXT AUTH
+import { SessionProvider } from "next-auth/react";
+
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <Provider store={store}>
-      <Layout>
-        <Head>
-          <title>The Tony Blog!</title>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-        </Head>
-        <Component {...pageProps} />
-      </Layout>
-    </Provider>
+    <SessionProvider session={session}>
+      <Provider store={store}>
+        <Layout>
+          <Head>
+            <title>The Tony Blog!</title>
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width"
+            />
+          </Head>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
+    </SessionProvider>
   );
 }
 
