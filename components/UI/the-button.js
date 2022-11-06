@@ -11,6 +11,7 @@ export const TheButton = ({
   label,
   isLoading,
   funcToExecute,
+  disabledProps,
 }) => {
   const renderStyle = useMemo(() => {
     switch (severity) {
@@ -30,6 +31,7 @@ export const TheButton = ({
       role="button"
       className={`${classes["button"]} ${classes[renderStyle]}`}
       type={funcToExecute ? "button" : "submit"}
+      disabled={isLoading === true || disabledProps}
       onClick={funcToExecute}
     >
       {isLoading && <FontAwesomeIcon className="fa-spin" icon={faSpinner} />}

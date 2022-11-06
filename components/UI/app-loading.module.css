@@ -1,0 +1,12 @@
+.app-loading {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-secondary-800);
+  color: var(--color-form-text);
+  display: grid;
+  place-items: center;
+  z-index: 999999;
+}

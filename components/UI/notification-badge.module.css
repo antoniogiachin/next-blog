@@ -1,0 +1,50 @@
+.notification-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 350px;
+  height: 150px;
+  z-index: 9999;
+  border-radius: var(--rounded-md);
+  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  opacity: 0.9;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-badge p {
+  font-size: var(--font-md);
+}
+
+.notification-badge .notification-badge-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.notification-badge .notification-badge-actions .notification-close-button {
+  cursor: pointer;
+}
+
+.notification-badge .notification-badge-actions span {
+  font-size: var(--font-xl);
+}
+
+.notification-badge .notification-badge-actions_desc {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.notification-badge.notification-warning {
+  background-color: orange;
+}
+.notification-badge.notification-success {
+  background-color: var(--color-success-500);
+}
+.notification-badge.notification-danger {
+  background-color: var(--color-danger-500);
+}

@@ -26,12 +26,9 @@
   }
 
   .register .container {
-    display: flex;
-    flex-direction: column;
     gap: 2rem;
     width: 95%;
-    padding: 4rem 6rem;
-    background: var(--color-primary-100);
+    padding: 3rem;
     border-radius: var(--rounded-sm);
     margin-top: 1rem;
   }

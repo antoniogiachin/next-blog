@@ -41,6 +41,10 @@
   animation: hide 0.6s linear;
 }
 
+.header .navbar span {
+  cursor: pointer;
+}
+
 .header .navbar ul {
   display: flex;
   flex-direction: column;
