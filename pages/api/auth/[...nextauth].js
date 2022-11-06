@@ -8,7 +8,7 @@ import { connectToDatabase } from "../../../lib/db";
 
 export default NextAuth({
   session: {
-    jwt: true,
+    strategy: "jwt",
   },
   secret: process.env.APP_JWT_SECRET,
   providers: [
