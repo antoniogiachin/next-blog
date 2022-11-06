@@ -3,7 +3,8 @@ import { LoginForm } from "../../components/auth/login-form";
 import classes from "./login.module.css";
 
 // NEXT AUTH
-import { getSession } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 const Login = (props) => {
   return (
@@ -17,12 +18,16 @@ const Login = (props) => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession({ req: context.req });
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
 
   if (session) {
     return {
       props: { session },
-      redirect: { destination: "/", permanent: false },
+      redirect: { destination: "/dashboard", permanent: false },
     };
   }
 

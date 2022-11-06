@@ -107,7 +107,7 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
                 onClick={() => {
                   handleSidebarShow();
                 }}
-                href="/"
+                href="/dashboard"
               >
                 Dashboard
               </Link>

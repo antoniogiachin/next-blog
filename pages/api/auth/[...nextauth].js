@@ -6,7 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { comparePassword } from "../../../lib/auth/bcrypt-util";
 import { connectToDatabase } from "../../../lib/db";
 
-export default NextAuth({
+export const authOptions = {
   session: {
     strategy: "jwt",
   },
@@ -54,4 +54,6 @@ export default NextAuth({
       },
     }),
   ],
-});
+};
+
+export default NextAuth(authOptions);

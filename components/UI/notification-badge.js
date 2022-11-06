@@ -16,7 +16,7 @@ export const NotificationBadge = ({ severity, text }) => {
   const dispatch = useDispatch();
 
   const handleCloseNotification = () => {
-    dispatch(RESET_NOTIFICATION);
+    dispatch(RESET_NOTIFICATION());
   };
 
   const renderRules = useMemo(() => {

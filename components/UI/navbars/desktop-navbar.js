@@ -53,7 +53,7 @@ export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
           </li>
           {session && (
             <li>
-              <Link href="/">Dashboard</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </li>
           )}
           {!session && (
