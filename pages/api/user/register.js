@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    if (!password !== !confirmPassword) {
+    if (password !== confirmPassword) {
       res
         .status(422)
         .json({ success: false, message: "The passwords don't match!!" });

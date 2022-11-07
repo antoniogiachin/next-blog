@@ -54,7 +54,6 @@ export const LoginForm = () => {
         email,
         password,
       });
-
       if (loginResult.error) {
         dispatch(SET_LOADING_STATUS(false));
         dispatch(SET_ERROR(loginResult.error));

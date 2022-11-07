@@ -54,7 +54,8 @@ export const RegisterForm = () => {
       return;
     }
 
-    if (!password !== !confirmPassword) {
+    if (password !== confirmPassword) {
+      console.log(password, confirmPassword, "QUI");
       dispatch(SET_ERROR("The passwords are different!"));
       return;
     }
@@ -86,7 +87,7 @@ export const RegisterForm = () => {
           SET_NOTIFICATION({
             show: true,
             severity: "success",
-            text: "Registration Successfull!",
+            text: result.message || "Registration Successfull!",
           })
         );
         router.replace("/");

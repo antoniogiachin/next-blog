@@ -16,9 +16,14 @@
   font-size: var(--font-md);
   text-transform: uppercase;
 }
+
 .header nav ul li {
   padding: 0.5rem;
   border: 1px solid transparent;
+}
+
+.header nav ul span {
+  cursor: pointer;
 }
 
 .header nav ul li:hover {

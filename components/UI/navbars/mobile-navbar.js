@@ -34,8 +34,7 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
       setShowSidebar("hide");
       if (mode === "logout") {
         dispatch(SET_GLOBAL_LOADING_STATUS(true));
-        signOut();
-        router.replace("/login");
+        signOut({ callbackUrl: "http://localhost:3000/auth/login" });
       }
       return;
     } else if (mode !== "simple" && !showSidebar) {

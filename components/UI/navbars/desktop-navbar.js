@@ -25,8 +25,7 @@ export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
 
   const handleLogout = () => {
     dispatch(SET_GLOBAL_LOADING_STATUS(true));
-    signOut();
-    router.replace("/login");
+    signOut({ callbackUrl: "http://localhost:3000/auth/login" });
   };
 
   useEffect(() => {
