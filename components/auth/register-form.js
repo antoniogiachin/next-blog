@@ -72,6 +72,11 @@ export const RegisterForm = () => {
       dispatch(SET_LOADING_STATUS(true));
       const result = await postApi("/api/user/register", newUser);
       console.log(result, "RESULT REGISTER");
+
+      if (!result.success) {
+        throw new Error(result.message || "Something went wrong!");
+      }
+
       const loginResult = await signIn("credentials", {
         redirect: false,
         email: newUser.email,
@@ -80,7 +85,7 @@ export const RegisterForm = () => {
 
       if (loginResult.error) {
         dispatch(SET_LOADING_STATUS(false));
-        dispatch(SET_ERROR(loginResult.error));
+        throw new Error(loginResult.error);
       } else {
         dispatch(SET_LOADING_STATUS(false));
         dispatch(
@@ -94,7 +99,7 @@ export const RegisterForm = () => {
       }
     } catch (err) {
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(err));
+      dispatch(SET_ERROR(err.message));
     }
   };
 

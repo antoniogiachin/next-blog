@@ -56,7 +56,7 @@ export const LoginForm = () => {
       });
       if (loginResult.error) {
         dispatch(SET_LOADING_STATUS(false));
-        dispatch(SET_ERROR(loginResult.error));
+        throw new Error(loginResult.error);
       } else {
         dispatch(SET_LOADING_STATUS(false));
         dispatch(
@@ -70,7 +70,7 @@ export const LoginForm = () => {
       }
     } catch (err) {
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(err));
+      dispatch(SET_ERROR(err.message));
     }
   };
 

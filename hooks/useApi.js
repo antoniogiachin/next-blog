@@ -20,7 +20,7 @@ export const useApi = () => {
     } catch (err) {
       console.log(err);
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(err));
+      dispatch(SET_ERROR(err.message));
     }
 
     dispatch(SET_LOADING_STATUS(false));
@@ -46,9 +46,9 @@ export const useApi = () => {
         throw new Error(data.message || "Something went wrong!");
       }
     } catch (err) {
-      console.log(err);
+      console.log(err.message);
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(err));
+      dispatch(SET_ERROR(err.message));
     }
 
     dispatch(SET_LOADING_STATUS(false));
@@ -75,7 +75,7 @@ export const useApi = () => {
     } catch (err) {
       console.log(err);
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(err));
+      dispatch(SET_ERROR(err.message));
     }
 
     dispatch(SET_LOADING_STATUS(false));
@@ -101,7 +101,7 @@ export const useApi = () => {
     } catch (err) {
       console.log(err);
       dispatch(SET_LOADING_STATUS(false));
-      dispatch(SET_ERROR(err));
+      dispatch(SET_ERROR(err.message));
     }
 
     dispatch(SET_LOADING_STATUS(false));
