@@ -95,6 +95,16 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
               onClick={() => {
                 handleSidebarShow();
               }}
+              href="/"
+            >
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              onClick={() => {
+                handleSidebarShow();
+              }}
               href="/posts"
             >
               Posts

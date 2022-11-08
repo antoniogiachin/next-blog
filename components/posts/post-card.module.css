@@ -2,6 +2,8 @@
   border-radius: var(--rounded-sm);
   border: 1px solid var(--color-gray-800);
   box-shadow: 0.1rem 0.1rem 0.2rem rgba(2, 2, 2, 0.2);
+  background: var(--color-primary-100);
+  color: var(--color-form-text);
   display: flex;
   flex-direction: column;
 }
@@ -11,7 +13,6 @@
   border-bottom: 1px solid rgba(2, 2, 2, 0.5);
   height: 10rem;
   overflow: hidden;
-  padding-bottom: 0.2rem;
 }
 
 .post-card .post-image-container img {

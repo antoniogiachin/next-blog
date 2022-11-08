@@ -40,6 +40,8 @@ export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
     }
   }, [isGlobalLoading, dispatch]);
 
+  const isHome = router.asPath === "/";
+
   return (
     <header className={classes.header}>
       <h1>
@@ -47,6 +49,11 @@ export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
       </h1>
       <nav>
         <ul>
+          {!session && !isHome && (
+            <li>
+              <Link href="/">Home</Link>
+            </li>
+          )}
           <li>
             <Link href="/posts">Posts</Link>
           </li>
