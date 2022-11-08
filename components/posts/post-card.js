@@ -7,7 +7,15 @@ import { TheButton } from "../UI/the-button";
 import { faPlane } from "@fortawesome/free-solid-svg-icons";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
+import { useRouter } from "next/router";
+
 export const PostCard = ({ post }) => {
+  const router = useRouter();
+
+  const navigateWithPush = (path) => {
+    router.push(path);
+  };
+
   return (
     <article className={classes["post-card"]}>
       <div className={classes["post-image-container"]}>
@@ -20,7 +28,13 @@ export const PostCard = ({ post }) => {
         <p>{post.recap}</p>
       </div>
       <div className={classes["post-actions-container"]}>
-        <TheButton label={`Read ${post.title}`} icon={faPlane} />
+        <TheButton
+          funcToExecute={() => {
+            navigateWithPush(`/posts/${post.slug}`);
+          }}
+          label={`Read ${post.title}`}
+          icon={faPlane}
+        />
         <TheButton
           label={`Show other post by ${post.author}`}
           severity="info"

@@ -20,6 +20,7 @@ import {
   isGlobalLoadingStatus,
   SET_GLOBAL_LOADING_STATUS,
 } from "../../../store/slicers/appStatusSlice";
+import { Toggler } from "./toggler";
 
 export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
   const [showSidebar, setShowSidebar] = useState();
@@ -70,16 +71,7 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
           className={`'fa-3x' ${classes.awesome}`}
           icon={faBars}
         />
-        <h1>
-          <Link
-            onClick={() => {
-              handleSidebarShow("heading");
-            }}
-            href="/"
-          >
-            TTB!
-          </Link>
-        </h1>
+        <h1>TTB!</h1>
       </div>
       {/* {showSidebar && ( */}
       <nav
@@ -146,14 +138,7 @@ export const MobileNavbar = ({ toggleDarkMode, isDark }) => {
             </li>
           )}
           <li>
-            <div
-              onClick={toggleDarkMode}
-              className={`${classes.toggler} ${
-                isDark ? classes.dark : classes.light
-              }`}
-            >
-              <div className={classes.button}></div>
-            </div>
+            <Toggler toggleDarkMode={toggleDarkMode} isDark={isDark} />
           </li>
         </ul>
       </nav>

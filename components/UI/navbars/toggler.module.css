@@ -1,0 +1,44 @@
+.toggler {
+  border-radius: var(--rounded-full);
+  width: 6rem;
+  display: flex;
+  cursor: pointer;
+}
+
+.toggler:active {
+  animation: toggler 0.1s linear;
+}
+
+.toggler.dark {
+  background-color: var(--color-primary-800);
+  justify-content: end;
+}
+
+.toggler.light {
+  background-color: var(--color-primary-100);
+  justify-content: start;
+}
+
+.toggler .button {
+  background-color: var(--color-primary-500);
+  padding: 0.5rem 1rem;
+  border-radius: var(--rounded-full);
+}
+
+@keyframes toggler {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.3;
+  }
+}
+
+@media (min-width: 600px) {
+  .toggler {
+    border-radius: var(--rounded-full);
+    width: 10rem;
+  }
+}
+

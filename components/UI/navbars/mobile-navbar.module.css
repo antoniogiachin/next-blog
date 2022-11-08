@@ -69,43 +69,6 @@
   animation: underliner 1s ease-in-out;
 }
 
-.toggler {
-  border-radius: 4rem;
-  width: 4rem;
-  display: flex;
-  cursor: pointer;
-}
-
-.toggler:active {
-  animation: toggler 0.1s linear;
-}
-
-.toggler.dark {
-  background-color: var(--color-primary-800);
-  justify-content: end;
-}
-
-.toggler.light {
-  background-color: var(--color-primary-100);
-  justify-content: start;
-}
-
-.toggler .button {
-  background-color: var(--color-primary-500);
-  padding: 1rem;
-  border-radius: 4rem;
-}
-
-@keyframes toggler {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0.3;
-  }
-}
-
 @keyframes show {
   from {
     opacity: 0;

@@ -31,33 +31,6 @@
   animation-direction: alternate-reverse;
 }
 
-.toggler {
-  border-radius: 4rem;
-  width: 4rem;
-  display: flex;
-  cursor: pointer;
-}
-
-.toggler:active {
-  animation: toggler 0.1s linear;
-}
-
-.toggler.dark {
-  background-color: var(--color-primary-800);
-  justify-content: end;
-}
-
-.toggler.light {
-  background-color: var(--color-primary-100);
-  justify-content: start;
-}
-
-.toggler .button {
-  background-color: var(--color-primary-500);
-  padding: 1rem;
-  border-radius: 4rem;
-}
-
 @keyframes border {
   from {
     border-bottom: 1px solid var(--color-primary-text);
@@ -71,16 +44,6 @@
     border-right: 1px solid var(--color-primary-text);
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
-  }
-}
-
-@keyframes toggler {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0.3;
   }
 }
 

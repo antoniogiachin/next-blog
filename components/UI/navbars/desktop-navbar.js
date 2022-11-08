@@ -16,6 +16,8 @@ import {
   SET_GLOBAL_LOADING_STATUS,
 } from "../../../store/slicers/appStatusSlice";
 import { useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Toggler } from "./toggler";
 
 export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
   const { data: session, loading } = useSession();
@@ -75,14 +77,7 @@ export const DesktopNavbar = ({ toggleDarkMode, isDark }) => {
         </ul>
       </nav>
       <nav>
-        <div
-          onClick={toggleDarkMode}
-          className={`${classes.toggler} ${
-            isDark ? classes.dark : classes.light
-          }`}
-        >
-          <div className={classes.button}></div>
-        </div>
+        <Toggler toggleDarkMode={toggleDarkMode} isDark={isDark} />
       </nav>
     </header>
   );
