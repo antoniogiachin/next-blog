@@ -38,7 +38,6 @@
 @media (min-width: 600px) {
   .toggler {
     border-radius: var(--rounded-full);
-    width: 10rem;
+    width: 6rem;
   }
 }
-

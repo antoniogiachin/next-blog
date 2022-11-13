@@ -1,4 +1,3 @@
-import { useState } from "react";
 // REDUX
 import { SET_LOADING_STATUS, SET_ERROR } from "../store/slicers/appStatusSlice";
 import { useDispatch } from "react-redux";

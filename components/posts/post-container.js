@@ -5,9 +5,24 @@ import classes from "./post-container.module.css";
 
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import { useState } from "react";
+import { ReviewForm } from "./review-form";
+import { ReviewList } from "./review-list";
 
 export const PostContainer = ({ post }) => {
   console.log(post);
+  const [showReviews, setShowReviews] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+
+  const handleShowReviews = () => {
+    setShowReviews((prevShowState) => !prevShowState);
+  };
+  const handleWriteReview = () => {
+    setShowReviewForm((prevShowReviewForm) => !prevShowReviewForm);
+  };
+
   return (
     <article className={classes["post-container"]}>
       <div className={classes["title-container"]}>
@@ -18,12 +33,28 @@ export const PostContainer = ({ post }) => {
       <div>{parse(post.content)}</div>
       <div className={classes["post-actions"]}>
         <TheButton
-          label="Show Reviews"
-          icon={faPlusCircle}
+          funcToExecute={handleShowReviews}
+          label={showReviews ? "Close Reviews" : "Show Reviews"}
+          icon={showReviews ? faXmark : faPlusCircle}
           severity="success"
         />
-        <TheButton label="Write Rewiew" icon={faPen} severity="warning" />
+        <TheButton
+          funcToExecute={handleWriteReview}
+          label={showReviewForm ? "Close Editor" : "Write Review"}
+          icon={showReviewForm ? faXmark : faPen}
+          severity="warning"
+        />
       </div>
+      {showReviewForm && (
+        <div className={classes["review-form-container"]}>
+          <ReviewForm />  
+        </div>
+      )}
+      {showReviews && (
+        <div className={classes["review-container"]}>
+          <ReviewList reviews={post.reviews} />
+        </div>
+      )}
     </article>
   );
 };

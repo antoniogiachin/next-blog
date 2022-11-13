@@ -47,3 +47,13 @@
   justify-content: center;
   gap: 1rem;
 }
+
+.post-container .review-form-container,
+.post-container .review-container {
+  border-radius: var(--rounded-sm);
+  border: 1px solid var(--color-gray-800);
+  box-shadow: 0.1rem 0.1rem 0.2rem rgba(2, 2, 2, 0.2);
+  background: var(--color-primary-100);
+  color: var(--color-form-text);
+  padding: 2rem;
+}

@@ -1,5 +1,3 @@
-import React from "react";
-
 import classes from "./toggler.module.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

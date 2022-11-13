@@ -1,0 +1,23 @@
+.badge {
+  border: 1px solid var(--color-primary-800);
+  box-shadow: 0.5px 0.5px 0.5rem var(--color-form-text);
+  border-radius: var(--rounded-xs);
+  padding: 0.2rem 1rem;
+  display: flex;
+  justify-content: flex-start;
+  width: fit-content;
+}
+
+.badge-success {
+  background-color: var(--color-success-300);
+}
+.badge-danger {
+  background-color: var(--color-danger-300);
+  color: #ccc;
+}
+.badge-info {
+  background-color: var(--color-info-300);
+}
+.badge-secondary {
+  background-color: var(--color-gray-300);
+}
