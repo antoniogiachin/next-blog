@@ -1,12 +1,17 @@
 import { unstable_getServerSession } from "next-auth";
 import { Fragment } from "react";
+import { TheFileUploader } from "../../components/UI/the-file-uploader";
 import { connectToDatabase } from "../../lib/db";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 const Dashboard = ({ name, surname, email }) => {
   console.log(name, surname, email);
 
-  return <Fragment></Fragment>;
+  return (
+    <Fragment>
+      <TheFileUploader multiple={true} />
+    </Fragment>
+  );
 };
 
 export async function getServerSideProps(context) {
