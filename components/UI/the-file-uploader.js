@@ -22,15 +22,19 @@ export const TheFileUploader = ({ multiple, files, setFiles }) => {
   }, [isUploaded]);
 
   const handleUploadFiles = (event) => {
-    if (!multiple) {
+    if (!multiple && files.length >= 1) {
       dispatch(SET_ERROR("You can upload only 1 file!"));
       return;
     }
 
-    if (files.find((f) => f.name === event.target.files[0].name)) {
+    if (
+      files.length &&
+      files.find((f) => f.name === event.target.files[0].name)
+    ) {
       dispatch(SET_ERROR("File already Uploaded!"));
       return;
     }
+
     setFiles((prevFiles) => [...prevFiles, ...event.target.files]);
     setIsUploaded(true);
   };

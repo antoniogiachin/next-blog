@@ -1,0 +1,31 @@
+.create-post-container {
+  padding: 1rem;
+  border-radius: var(--rounded-sm);
+  background-color: var(--color-primary-100);
+  margin: 1rem 0;
+  color: var(--color-form-text);
+}
+
+.create-post-container h1 {
+  font-size: var(--font-5xl);
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.create-post-container input {
+  padding: 0.5rem;
+  border-radius: var(--rounded-xs);
+  display: block;
+  width: 100%;
+  margin: 0.8rem 0 1.5rem;
+}
+
+.create-post-container .create-post-ph {
+  font-size: var(--font-2xl);
+  margin: 1rem 0;
+}
+
+.create-post-container .create-post-actions {
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,13 +1,24 @@
 import { unstable_getServerSession } from "next-auth";
-import { Fragment } from "react";
-import { TheFileUploader } from "../../components/UI/the-file-uploader";
+import { DashboardSwitcher } from "../../components/dashboard/dashoboard-switcher";
+
 import { connectToDatabase } from "../../lib/db";
 import { authOptions } from "../api/auth/[...nextauth]";
 
+import { useState } from "react";
+import { CreatePost } from "../../components/dashboard/create-post";
+
 const Dashboard = ({ name, surname, email }) => {
   console.log(name, surname, email);
+  const [action, setAction] = useState("editProfile");
 
-  return <Fragment></Fragment>;
+  return (
+    <section>
+      <DashboardSwitcher action={action} setAction={setAction} />
+      {action === "editProfile" && <p>Profile</p>}
+      {action === "writePost" && <CreatePost />}
+      {action === "seePosts" && <p>Guarda</p>}
+    </section>
+  );
 };
 
 export async function getServerSideProps(context) {

@@ -27,17 +27,24 @@ export const useApi = () => {
     return data;
   };
 
-  const postApi = async (path, payload) => {
+  const postApi = async (path, payload, isFormData = false) => {
     dispatch(SET_LOADING_STATUS(true));
-    let data;
-    try {
-      const response = await fetch(path, {
+    let options;
+    if (isFormData) {
+      options = {
+        method: "POST",
+        body: payload,
+      };
+    } else {
+      options = {
         method: "POST",
         body: JSON.stringify(payload),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+        "Content-Type": "application/json",
+      };
+    }
+    let data;
+    try {
+      const response = await fetch(path, options);
 
       data = await response.json();
 

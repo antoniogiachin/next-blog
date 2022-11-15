@@ -1,18 +1,51 @@
+import path from "path";
+import fs from "fs";
+import multer from "multer";
 // proteggo rotta con token
 import { connectToDatabase } from "../../../lib/db";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
-//multer
-import multer from "multer";
+// middleware
+import nextConnect from "next-connect";
 
-// rimozione body parser to JSON per ricevere stream file
-export const config = {
-  api: {
-    bodyParser: false,
+const handler = nextConnect();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const name = file.originalname.split(".")[0];
+    let postThumbnailImageDir = `posts/${name.trim().replaceAll(" ", "")}`;
+    let postThumbnailImagePath = path.join(
+      process.cwd(),
+      "public",
+      "images",
+      postThumbnailImageDir
+    );
+    if (!fs.existsSync(postThumbnailImagePath)) {
+      fs.mkdirSync(postThumbnailImagePath);
+    }
+    cb(null, postThumbnailImagePath);
   },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      (new Date().toISOString() + file.originalname).replaceAll(" ", "")
+    );
+  },
+});
+
+// profile pictures type filter
+const fileFilter = (req, file, cb) => {
+  const allowedFileTypes = ["image/jpg", "image/jpeg", "image/png"];
+  if (allowedFileTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
 };
 
-export default async function handler(req, res) {
+const upload = multer({ storage, fileFilter });
+
+const connection = async () => {
   let client;
   let db;
 
@@ -27,115 +60,49 @@ export default async function handler(req, res) {
     return;
   }
 
-  if (req.method === "GET") {
-    const query = req.query;
+  return db;
+};
 
-    let posts;
-    try {
-      posts = await db.collection("posts").find(query).toArray();
-    } catch (err) {
-      client.close();
-      res
-        .status(500)
-        .json({ success: false, message: "Failed to fetch all posts!" });
-      return;
-    }
+handler.get(async (req, res) => {
+  const db = await connection();
 
-    res.status(200).json({
-      success: true,
-      message: "All posts Fetch!",
-      posts,
-    });
-  }
+  const query = req.query;
 
-  // DA IMPLEMENTARE
-  if (req.method === "POST") {
-    const session = await unstable_getServerSession(req, res, authOptions);
-
-    if (!session) {
-      client.close();
-      res.status(401).json({ success: false, message: "Unhautorized!" });
-      return;
-    }
-
-    const { title, content } = req.body;
-    const file = req.file;
-
-    if ((!title, !content)) {
-      res.status(422).json({ success: false, message: "All Fields Required!" });
-      return;
-    }
-
-    const reviewToInsert = {
-      title,
-      content,
-      vote: 0,
-      reactions: { thumbUp: 0, thumbsDown: 0, heart: 0 },
-    };
-
-    let createReview;
-    try {
-      createReview = await db.collection("reviews").insertOne(reviewToInsert);
-    } catch (err) {
-      client.close();
-      res
-        .status(500)
-        .json({ success: false, message: "Failed to create new review!" });
-      return;
-    }
-
-    try {
-      await db
-        .collection("posts")
-        .updateOne(
-          { _id: postId },
-          { $push: { reviews: createReview.insertedId } }
-        );
-    } catch (err) {
-      client.close();
-      res
-        .status(500)
-        .json({ success: false, message: "Failed to create new review!" });
-      return;
-    }
-
+  let posts;
+  try {
+    posts = await db.collection("posts").find(query).toArray();
+  } catch (err) {
     client.close();
-
-    res.status(201).json({
-      success: true,
-      message: "Review Successfully Inserted!",
-      review: createReview,
-    });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch all posts!" });
+    return;
   }
 
-  if (req.method === "PUT") {
-    const reviewId = req.params.id;
-    const { thumbUp, thumbsDown, heart } = req.body;
+  res.status(200).json({
+    success: true,
+    message: "All posts Fetch!",
+    posts,
+  });
+});
 
-    let reviewToUpdate;
-    try {
-      reviewToUpdate = await db
-        .collection("reviews")
-        .updateOne(
-          { _id: reviewId },
-          { $set: { reactions: { thumbUp, thumbsDown, heart } } }
-        );
-    } catch (err) {
-      client.close();
-      res
-        .status(500)
-        .json({ success: false, message: "Error Updating Review" });
-      return;
-    }
+handler.post(upload.any(), async (req, res) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
 
+  if (!session) {
     client.close();
-    res.status(200).json({
-      success: true,
-      message: "Review Successfully Updated!",
-      review: reviewToUpdate,
-    });
+    res.status(401).json({ success: false, message: "Unhautorized!" });
+    return;
   }
 
-  if (req.method === "DELETE") {
-  }
-}
+  console.log(req);
+});
+
+// rimozione body parser to JSON per ricevere stream file
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+export default handler;

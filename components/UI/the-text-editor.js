@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
 
 import classes from "./the-text-editor.module.css";
@@ -57,13 +56,12 @@ export const TheTextEditor = ({ content, setContent }) => {
       <QuillNoSSRWrapper
         modules={modules}
         formats={formats}
-        theme="snow"
+        theme={"snow"}
         value={content}
         onChange={(e) => {
           setContent(e);
         }}
       />
-      {content}
     </div>
   );
 };

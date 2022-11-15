@@ -1,13 +1,12 @@
 .file-uploader-container {
-  background: var(--color-primary-100);
+  background: var(--color-secondary-100);
   color: var(--color-form-text);
-  min-height: 10rem;
+  min-height: 2rem;
   padding: 1rem 0;
   width: 50%;
   border-radius: var(--rounded-sm);
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 }
 
@@ -40,4 +39,12 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .file-uploader-container .file-preview-container {
+    width: 98%;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+  }
 }
