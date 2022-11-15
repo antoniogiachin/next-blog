@@ -1,9 +1,12 @@
 import { unstable_getServerSession } from "next-auth";
+import { Fragment } from "react";
 import { connectToDatabase } from "../../lib/db";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 const Dashboard = ({ name, surname, email }) => {
-  return <div>Dashboard</div>;
+  console.log(name, surname, email);
+
+  return <Fragment></Fragment>;
 };
 
 export async function getServerSideProps(context) {

@@ -56,4 +56,5 @@
   background: var(--color-primary-100);
   color: var(--color-form-text);
   padding: 2rem;
+  margin: 1rem 0;
 }
