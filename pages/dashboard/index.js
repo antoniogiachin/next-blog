@@ -7,11 +7,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 const Dashboard = ({ name, surname, email }) => {
   console.log(name, surname, email);
 
-  return (
-    <Fragment>
-      <TheFileUploader multiple={true} />
-    </Fragment>
-  );
+  return <Fragment></Fragment>;
 };
 
 export async function getServerSideProps(context) {
