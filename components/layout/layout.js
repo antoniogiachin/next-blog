@@ -82,7 +82,7 @@ export const Layout = ({ children }) => {
       dispatch(SET_GLOBAL_LOADING_STATUS(true));
     };
     const handleStop = (type = "default") => {
-      dispatch(SET_GLOBAL_LOADING_STATUS(true));
+      dispatch(SET_GLOBAL_LOADING_STATUS(false));
       if (type === "error") {
         dispatch(SET_ERROR("Error Routing"));
       }
