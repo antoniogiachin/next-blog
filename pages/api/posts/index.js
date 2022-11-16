@@ -43,6 +43,13 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+const thumbDeleter = (path) => {
+  const file = path.join(process.cwd(), "public", path);
+  fs.unlink(file, (err) => {
+    if (err) console.log(err);
+  });
+};
+
 const upload = multer({ storage, fileFilter });
 
 const connection = async () => {
@@ -87,15 +94,109 @@ handler.get(async (req, res) => {
 });
 
 handler.post(upload.any(), async (req, res) => {
+  const thumbnail = req.files[0].destination.split("public")[1];
+
   const session = await unstable_getServerSession(req, res, authOptions);
 
   if (!session) {
+    thumbDeleter(thumbnail);
     client.close();
     res.status(401).json({ success: false, message: "Unhautorized!" });
     return;
   }
 
-  console.log(req);
+  let db;
+  try {
+    db = await connection();
+  } catch (err) {
+    thumbDeleter(thumbnail);
+    client.close();
+    res.status(500).json({ success: false, message: "Error reach your DB!" });
+    return;
+  }
+
+  const { title, content } = req.body;
+  const { user } = session;
+  const recap = content.slice(0, 100);
+
+  let author;
+  try {
+    const findAuthorBySession = await db
+      .collection("users")
+      .findOne({ email: user.email });
+    author = `${findAuthorBySession.name} ${findAuthorBySession.surname}`;
+  } catch (err) {
+    thumbDeleter(thumbnail);
+    client.close();
+    res.status(401).json({ success: false, message: "Unauthorized!" });
+    return;
+  }
+
+  const parsedTitle = title.replaceAll(" ", "-");
+  let slugToTest = `${parsedTitle}-${new Date()
+    .toLocaleDateString("en-US")
+    .replaceAll(".", "")
+    .replaceAll(" ", "")}-${new Date()
+    .toLocaleTimeString("en-US")
+    .replaceAll(".", "")
+    .replaceAll(" ", "")
+    .replaceAll(":", "")}`;
+
+  let slug = slugToTest;
+  try {
+    while (await db.collection("posts").findOne({ slug })) {
+      slug =
+        slugToTest +
+        new Date()
+          .toLocaleTimeString("en-US")
+          .replaceAll(".", "")
+          .replaceAll(" ", "")
+          .replaceAll(":", "");
+    }
+  } catch (err) {
+    thumbDeleter(thumbnail);
+    client.close();
+    res.status(500).json({ success: false, message: "Erroe checking slug!" });
+    return;
+  }
+
+  const postToSave = {
+    slug,
+    thumbnail,
+    title: parsedTitle,
+    recap,
+    author,
+    content,
+  };
+
+  let newPost;
+  try {
+    newPost = await db.collection("posts").insertOne(postToSave);
+  } catch (err) {
+    thumbDeleter(thumbnail);
+    client.close();
+    res.status(500).json({ success: false, message: "Error creating post!" });
+    return;
+  }
+
+  try {
+    await db
+      .collection("users")
+      .updateOne(
+        { email: user.email },
+        { $push: { posts: newPost.insertedId } }
+      );
+  } catch (error) {
+    thumbDeleter(thumbnail);
+    client.close();
+    res.status(500).json({ success: false, message: "Error Updating User!" });
+    return;
+  }
+
+  client.close();
+  res
+    .status(201)
+    .json({ success: true, message: "New Post Created!", post: postToSave });
 });
 
 // rimozione body parser to JSON per ricevere stream file
