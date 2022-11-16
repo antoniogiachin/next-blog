@@ -185,6 +185,7 @@ handler.post(upload.any(), async (req, res) => {
     recap,
     author,
     content,
+    reviews: [],
     isFeatured: false,
   };
 

@@ -6,7 +6,10 @@ import classes from "./app-loading.module.css";
 export const AppLoading = () => {
   return (
     <div className={classes["app-loading"]}>
-      <FontAwesomeIcon className="fa-9x fa-spin" icon={faSpinner} />
+      <div className={classes["app-loading-content"]}>
+        <h1>Your favourite Blog Site is working for you!...</h1>
+        <FontAwesomeIcon className="fa-9x fa-spin" icon={faSpinner} />
+      </div>
     </div>
   );
 };

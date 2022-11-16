@@ -14,8 +14,6 @@ import { ReviewList } from "./review-list";
 import Image from "next/image";
 
 export const PostContainer = ({ post }) => {
-  console.log(post.thumbnail);
-  console.log(`/public${post.thumbnail}`);
   const [showReviews, setShowReviews] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
