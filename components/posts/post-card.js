@@ -1,6 +1,7 @@
 import classes from "./post-card.module.css";
 
 import Image from "next/image";
+import parse from "html-react-parser";
 
 import { TheButton } from "../UI/the-button";
 
@@ -19,13 +20,12 @@ export const PostCard = ({ post }) => {
   return (
     <article className={classes["post-card"]}>
       <div className={classes["post-image-container"]}>
-        {/* <Image src={'post.image'} alt={post.slug} width={300} height={300} /> */}
-        <img src="https://picsum.photos/200/300" alt="dummy" />
+        <Image src={post.thumbnail} alt={post.title} width={300} height={500} />
       </div>
       <div className={classes["post-recap-container"]}>
         <h2>{post.title}</h2>
         <h4>{post.author}</h4>
-        <p>{post.recap}</p>
+        <div>{parse(post.recap)} ...</div>
       </div>
       <div className={classes["post-actions-container"]}>
         <TheButton
