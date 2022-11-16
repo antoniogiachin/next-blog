@@ -1,5 +1,5 @@
 .create-post-container {
-  padding: 1rem;
+  padding: 1rem 8rem;
   border-radius: var(--rounded-sm);
   background-color: var(--color-primary-100);
   margin: 1rem 0;

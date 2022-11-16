@@ -6,9 +6,10 @@ import { authOptions } from "../api/auth/[...nextauth]";
 
 import { useState } from "react";
 import { CreatePost } from "../../components/dashboard/create-post";
+import { ShowPosts } from "../../components/dashboard/show-posts";
 
-const Dashboard = ({ name, surname, email }) => {
-  console.log(name, surname, email);
+const Dashboard = ({ name, surname, email, posts }) => {
+  const parsedPosts = JSON.parse(posts);
   const [action, setAction] = useState("editProfile");
 
   return (
@@ -16,7 +17,7 @@ const Dashboard = ({ name, surname, email }) => {
       <DashboardSwitcher action={action} setAction={setAction} />
       {action === "editProfile" && <p>Profile</p>}
       {action === "writePost" && <CreatePost />}
-      {action === "seePosts" && <p>Guarda</p>}
+      {action === "seePosts" && <ShowPosts posts={parsedPosts} />}
     </section>
   );
 };
@@ -46,6 +47,18 @@ export async function getServerSideProps(context) {
 
   const findUser = await db.collection("users").findOne({ email: user.email });
 
+  let usersPosts = [];
+  if (findUser.posts.length) {
+    for (const id of findUser.posts) {
+      const res = await db.collection("posts").findOne({ _id: id });
+      if (res) {
+        usersPosts.push(res);
+      }
+    }
+  }
+
+  console.log(JSON.stringify(usersPosts));
+
   if (!findUser) {
     client.close();
     return {
@@ -59,7 +72,7 @@ export async function getServerSideProps(context) {
   const { name, surname, email } = findUser;
 
   return {
-    props: { name, surname, email },
+    props: { name, surname, email, posts: JSON.stringify(usersPosts) },
   };
 }
 

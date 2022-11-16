@@ -11,8 +11,11 @@ import { useState } from "react";
 import { ReviewForm } from "./review-form";
 import { ReviewList } from "./review-list";
 
+import Image from "next/image";
+
 export const PostContainer = ({ post }) => {
-  console.log(post);
+  console.log(post.thumbnail);
+  console.log(`/public${post.thumbnail}`);
   const [showReviews, setShowReviews] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
 
@@ -26,7 +29,7 @@ export const PostContainer = ({ post }) => {
   return (
     <article className={classes["post-container"]}>
       <div className={classes["title-container"]}>
-        <img src="https://picsum.photos/200/300" alt="dummy" />
+        <Image src={post.thumbnail} alt={post.title} fill={true} />
         <div className={classes["title-overlay"]}></div>
         <h1>{post.title}</h1>
       </div>
@@ -47,7 +50,7 @@ export const PostContainer = ({ post }) => {
       </div>
       {showReviewForm && (
         <div className={classes["review-form-container"]}>
-          <ReviewForm />  
+          <ReviewForm />
         </div>
       )}
       {showReviews && (

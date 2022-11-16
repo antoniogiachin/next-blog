@@ -94,7 +94,8 @@ handler.get(async (req, res) => {
 });
 
 handler.post(upload.any(), async (req, res) => {
-  const thumbnail = req.files[0].destination.split("public")[1];
+  const thumbnail =
+    req.files[0].destination.split("public")[1] + "/" + req.files[0].filename;
 
   const session = await unstable_getServerSession(req, res, authOptions);
 
@@ -150,9 +151,11 @@ handler.post(upload.any(), async (req, res) => {
   let slugToTest = `${parsedTitle}-${new Date()
     .toLocaleDateString("en-US")
     .replaceAll(".", "")
+    .replaceAll("/", "")
     .replaceAll(" ", "")}-${new Date()
     .toLocaleTimeString("en-US")
     .replaceAll(".", "")
+    .replaceAll("/", "")
     .replaceAll(" ", "")
     .replaceAll(":", "")}`;
 
@@ -164,6 +167,7 @@ handler.post(upload.any(), async (req, res) => {
         new Date()
           .toLocaleTimeString("en-US")
           .replaceAll(".", "")
+          .replaceAll("/", "")
           .replaceAll(" ", "")
           .replaceAll(":", "");
     }

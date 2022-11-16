@@ -1,8 +1,6 @@
 import { PostContainer } from "../../components/posts/post-container";
-import {
-  getAllFeaturedPosts,
-  getPostBySlug,
-} from "../../lib/dummies/dummy-posts";
+
+import { connectToDatabase } from "../../lib/db";
 
 const SinglePostPage = ({ post }) => {
   return (
@@ -15,16 +13,24 @@ const SinglePostPage = ({ post }) => {
 export async function getStaticProps(context) {
   const postSlug = context.params.slug;
 
-  const post = getPostBySlug(postSlug);
+  const client = await connectToDatabase();
+
+  const db = client.db();
+
+  const post = await db.collection("posts").findOne({ slug: postSlug });
 
   return {
-    props: { post },
+    props: { post: JSON.parse(JSON.stringify(post)) },
     revalidate: 30,
   };
 }
 
 export async function getStaticPaths() {
-  const posts = getAllFeaturedPosts();
+  const client = await connectToDatabase();
+
+  const db = client.db();
+
+  const posts = await db.collection("posts").find().toArray();
 
   const paths = posts.map((post) => ({ params: { slug: post.slug } }));
 
