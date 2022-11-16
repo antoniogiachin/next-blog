@@ -67,11 +67,11 @@ const connection = async () => {
     return;
   }
 
-  return db;
+  return { db, client };
 };
 
 handler.get(async (req, res) => {
-  const db = await connection();
+  const { db, client } = await connection();
 
   const query = req.query;
 
@@ -105,19 +105,33 @@ handler.post(upload.any(), async (req, res) => {
     return;
   }
 
-  let db;
-  try {
-    db = await connection();
-  } catch (err) {
-    thumbDeleter(thumbnail);
-    client.close();
-    res.status(500).json({ success: false, message: "Error reach your DB!" });
-    return;
-  }
+  const { db, client } = await connection();
 
   const { title, content } = req.body;
   const { user } = session;
   const recap = content.slice(0, 100);
+
+  // max 5 post con lo stesso titolo
+  let sameTitleArticles;
+  try {
+    sameTitleArticles = db.collection("posts").find({ title }).toArray();
+  } catch (err) {
+    thumbDeleter(thumbnail);
+    client.close();
+    res.status(500).json({
+      success: false,
+      message: "Error Fetching articles",
+    });
+    return;
+  }
+
+  if (sameTitleArticles.length > 5) {
+    res.status(400).json({
+      success: false,
+      message:
+        "Please change your title (too manun posts with the same title)!",
+    });
+  }
 
   let author;
   try {
