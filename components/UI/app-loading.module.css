@@ -6,7 +6,6 @@
   left: 0;
   background-color: var(--color-secondary-800);
   color: var(--color-form-text);
-  opacity: 0.8;
   display: grid;
   place-items: center;
   z-index: 999999;
