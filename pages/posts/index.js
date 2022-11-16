@@ -1,5 +1,5 @@
 import { PostList } from "../../components/posts/post-list";
-import { getAllPosts } from "../../lib/dummies/dummy-posts";
+import { connectToDatabase } from "../../lib/db";
 
 export default function Posts({ posts }) {
   const toBeRendered = posts.map((post) => (
@@ -16,12 +16,17 @@ export default function Posts({ posts }) {
   );
 }
 
-export async function getServerSideProps() {
-  const allPosts = getAllPosts();
+export async function getStaticProps() {
+  const client = await connectToDatabase();
+
+  const db = client.db();
+
+  const allPosts = await db.collection("posts").find().toArray();
 
   return {
     props: {
-      posts: allPosts || [],
+      posts: JSON.parse(JSON.stringify(allPosts)) || [],
     },
+    revalidate: 60,
   };
 }

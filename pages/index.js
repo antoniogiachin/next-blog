@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { FeaturedPosts } from "../components/home-page/featured-posts";
 import { Hero } from "../components/home-page/hero";
 
-import { getAllFeaturedPosts } from "../lib/dummies/dummy-posts";
+import { connectToDatabase } from "../lib/db";
 
 export default function Home({ posts }) {
   return (
@@ -14,11 +14,19 @@ export default function Home({ posts }) {
 }
 
 export async function getStaticProps() {
-  const featuredPosts = getAllFeaturedPosts();
+  const client = await connectToDatabase();
+
+  const db = client.db();
+
+  const featuredPosts = await db
+    .collection("posts")
+    .find({ isFeatured: true })
+    .toArray();
+
   return {
     props: {
-      posts: featuredPosts || [],
+      posts: JSON.parse(JSON.stringify(featuredPosts)) || [],
     },
-    revalidate: 1000,
+    revalidate: 60,
   };
 }
