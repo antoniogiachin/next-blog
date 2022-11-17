@@ -4,8 +4,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: var(--color-secondary-800);
-  color: var(--color-form-text);
+  background-color: var(--color-faded-secondary-800);
+  color: var(--color-primary-text);
   display: grid;
   place-items: center;
   z-index: 999999;

@@ -74,6 +74,7 @@ h3 {
   --color-secondary-300: #ec4732;
   --color-secondary-500: #951e0e;
   --color-secondary-800: #4b0f07;
+  --color-faded-secondary-800: #4b0f07b3;
 
   --color-primary-text: #eee;
   --color-secondary-text: #222;
@@ -90,6 +91,7 @@ h3 {
   --color-secondary-300: #7ae1d5;
   --color-secondary-500: #84d1bf;
   --color-secondary-800: #1a746a;
+  --color-faded-secondary-800: #1a746ac8;
 
   --color-primary-text: #222;
   --color-secondary-text: #eee;
