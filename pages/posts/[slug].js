@@ -30,7 +30,11 @@ export async function getStaticPaths() {
 
   const db = client.db();
 
-  const posts = await db.collection("posts").find().toArray();
+  const posts = await db
+    .collection("posts")
+    .find()
+    .project({ slug: 1 })
+    .toArray();
 
   const paths = posts.map((post) => ({ params: { slug: post.slug } }));
 

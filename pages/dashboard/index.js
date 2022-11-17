@@ -57,8 +57,6 @@ export async function getServerSideProps(context) {
     }
   }
 
-  console.log(JSON.stringify(usersPosts));
-
   if (!findUser) {
     client.close();
     return {
