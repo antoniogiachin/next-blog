@@ -9,6 +9,8 @@ import { faSave } from "@fortawesome/free-solid-svg-icons";
 
 import { useApi } from "../../hooks/useApi";
 
+import { useRouter } from "next/router";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   SET_ERROR,
@@ -16,7 +18,7 @@ import {
   isLoadingStatus,
 } from "../../store/slicers/appStatusSlice";
 
-export const CreatePost = () => {
+export const CreatePost = ({ handleRedirectAction }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
@@ -52,7 +54,7 @@ export const CreatePost = () => {
     setContent("");
     setFiles("");
     titleInputRef.current.value = "";
-    titleInputRef.current.focus();
+    handleRedirectAction("seePosts", true, { query: title });
   };
 
   useEffect(() => {

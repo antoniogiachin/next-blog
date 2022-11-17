@@ -4,6 +4,8 @@ import { DashboardSwitcher } from "../../components/dashboard/dashoboard-switche
 import { connectToDatabase } from "../../lib/db";
 import { authOptions } from "../api/auth/[...nextauth]";
 
+import { useApi } from "../../hooks/useApi";
+
 import { useState } from "react";
 import { CreatePost } from "../../components/dashboard/create-post";
 import { ShowPosts } from "../../components/dashboard/show-posts";
@@ -11,13 +13,34 @@ import { ShowPosts } from "../../components/dashboard/show-posts";
 const Dashboard = ({ name, surname, email, posts }) => {
   const parsedPosts = JSON.parse(posts);
   const [action, setAction] = useState("editProfile");
+  const [refetched, setRefetched] = useState([]);
+
+  const { getApi } = useApi();
+
+  const handleRedirectAction = async (
+    action,
+    shouldRefetch = false,
+    options = {}
+  ) => {
+    let urlString = "/api/posts?author=" + name + "%20" + surname;
+    if (options.query) {
+      urlString += "&title" + "=" + options.query.replaceAll(" ", "-");
+    }
+    const { posts } = await getApi(urlString);
+    setRefetched(posts);
+    setAction(action);
+  };
 
   return (
     <section>
       <DashboardSwitcher action={action} setAction={setAction} />
       {action === "editProfile" && <p>Profile</p>}
-      {action === "writePost" && <CreatePost />}
-      {action === "seePosts" && <ShowPosts posts={parsedPosts} />}
+      {action === "writePost" && (
+        <CreatePost handleRedirectAction={handleRedirectAction} />
+      )}
+      {action === "seePosts" && (
+        <ShowPosts posts={parsedPosts} refetched={refetched} />
+      )}
     </section>
   );
 };
