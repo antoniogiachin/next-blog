@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
               name="viewport"
               content="initial-scale=1.0, width=device-width"
             />
-            <meta charset="utf-8" />
+            <meta charSet="utf-8" />
           </Head>
           <Component {...pageProps} />
         </Layout>
