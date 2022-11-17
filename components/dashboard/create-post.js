@@ -54,7 +54,11 @@ export const CreatePost = ({ handleRedirectAction }) => {
     setContent("");
     setFiles("");
     titleInputRef.current.value = "";
-    handleRedirectAction("seePosts", true, { query: title });
+    handleRedirectAction(
+      "posts",
+      { title: title.replaceAll(" ", "-") },
+      "seePosts"
+    );
   };
 
   useEffect(() => {
