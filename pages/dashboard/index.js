@@ -1,25 +1,33 @@
 import { unstable_getServerSession } from "next-auth";
 import { DashboardSwitcher } from "../../components/dashboard/dashoboard-switcher";
 
-import { connectToDatabase } from "../../lib/db";
+// import { connectToDatabase } from "../../lib/db";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-import { useRefetcher } from "../../hooks/useRefetcher";
+import { useApi } from "../../hooks/useApi";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CreatePost } from "../../components/dashboard/create-post";
 import { ShowPosts } from "../../components/dashboard/show-posts";
 
-const Dashboard = ({ name, surname, email, posts }) => {
-  const parsedPosts = JSON.parse(posts);
+const Dashboard = ({ name, email }) => {
+  const [posts, setPosts] = useState([]);
   const [action, setAction] = useState("editProfile");
 
-  const { refetch, refetched } = useRefetcher();
-
-  const handleRedirectAction = async (collection, query, action) => {
-    await refetch(collection, { ...query, author: `${name} ${surname}` });
+  const { getApi } = useApi();
+  const handleRedirectAction = async (action) => {
+    await initializer();
     setAction(action);
   };
+
+  const initializer = useCallback(async () => {
+    const { user } = await getApi("/api/user/fetch-user-infos");
+    setPosts(user[0].posts);
+  }, [getApi]);
+
+  useEffect(() => {
+    initializer();
+  }, []);
 
   return (
     <section>
@@ -28,9 +36,7 @@ const Dashboard = ({ name, surname, email, posts }) => {
       {action === "writePost" && (
         <CreatePost handleRedirectAction={handleRedirectAction} />
       )}
-      {action === "seePosts" && (
-        <ShowPosts posts={parsedPosts} refetched={refetched} />
-      )}
+      {action === "seePosts" && <ShowPosts posts={posts} />}
     </section>
   );
 };
@@ -54,36 +60,11 @@ export async function getServerSideProps(context) {
   delete session.user.image;
   const { user } = session;
 
-  const client = await connectToDatabase();
-
-  const db = client.db();
-
-  const findUser = await db.collection("users").findOne({ email: user.email });
-
-  let usersPosts = [];
-  if (findUser.posts.length) {
-    for (const id of findUser.posts) {
-      const res = await db.collection("posts").findOne({ _id: id });
-      if (res) {
-        usersPosts.push(res);
-      }
-    }
-  }
-
-  if (!findUser) {
-    await client.close();
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  await client.close();
-  const { name, surname, email } = findUser;
-
   return {
-    props: { name, surname, email, posts: JSON.stringify(usersPosts) },
+    props: {
+      name: user.name,
+      email: user.email,
+    },
   };
 }
 
