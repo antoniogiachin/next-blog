@@ -2,7 +2,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-
 // LIBS
 import { comparePassword } from "../../../lib/auth/bcrypt-util";
 import { connectToDatabase } from "../../../lib/db";
@@ -28,7 +27,7 @@ export const authOptions = {
           .findOne({ email: credentials.email });
 
         if (!findUserByEmail) {
-          client.close();
+          await client.close();
           throw new Error("User not found with this email!");
         }
 
@@ -39,7 +38,7 @@ export const authOptions = {
         );
 
         if (!isValidPass) {
-          client.close();
+          await client.close();
           throw new Error("Invalid password!");
         }
 
@@ -50,7 +49,7 @@ export const authOptions = {
         delete userInfos.password;
 
         // return di obj indica a next auth verificacompleta
-        client.close();
+        await client.close();
         return { ...userInfos };
       },
     }),

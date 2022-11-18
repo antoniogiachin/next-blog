@@ -71,7 +71,7 @@ export async function getServerSideProps(context) {
   }
 
   if (!findUser) {
-    client.close();
+    await client.close();
     return {
       redirect: {
         destination: "/",
@@ -79,7 +79,7 @@ export async function getServerSideProps(context) {
       },
     };
   }
-  client.close();
+  await client.close();
   const { name, surname, email } = findUser;
 
   return {

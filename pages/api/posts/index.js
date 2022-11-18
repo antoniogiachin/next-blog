@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import multer from "multer";
-// proteggo rotta con token
+// proteggo rotta con get unstable session
 import { connectToDatabase } from "../../../lib/db";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
@@ -60,7 +60,7 @@ const connection = async () => {
     client = await connectToDatabase();
     db = client.db();
   } catch (err) {
-    client.close();
+    await client.close();
     res
       .status(500)
       .json({ success: false, message: "Failed to connect to DB!" });
@@ -79,7 +79,7 @@ handler.get(async (req, res) => {
   try {
     posts = await db.collection("posts").find(query).toArray();
   } catch (err) {
-    client.close();
+    await client.close();
     res
       .status(500)
       .json({ success: false, message: "Failed to fetch all posts!" });
@@ -101,7 +101,7 @@ handler.post(upload.any(), async (req, res) => {
 
   if (!session) {
     thumbDeleter(thumbnail);
-    client.close();
+    await client.close();
     res.status(401).json({ success: false, message: "Unhautorized!" });
     return;
   }
@@ -118,7 +118,7 @@ handler.post(upload.any(), async (req, res) => {
     sameTitleArticles = db.collection("posts").find({ title }).toArray();
   } catch (err) {
     thumbDeleter(thumbnail);
-    client.close();
+    await client.close();
     res.status(500).json({
       success: false,
       message: "Error Fetching articles",
@@ -142,7 +142,7 @@ handler.post(upload.any(), async (req, res) => {
     author = `${findAuthorBySession.name} ${findAuthorBySession.surname}`;
   } catch (err) {
     thumbDeleter(thumbnail);
-    client.close();
+    await client.close();
     res.status(401).json({ success: false, message: "Unauthorized!" });
     return;
   }
@@ -173,7 +173,7 @@ handler.post(upload.any(), async (req, res) => {
     }
   } catch (err) {
     thumbDeleter(thumbnail);
-    client.close();
+    await client.close();
     res.status(500).json({ success: false, message: "Erroe checking slug!" });
     return;
   }
@@ -194,7 +194,7 @@ handler.post(upload.any(), async (req, res) => {
     newPost = await db.collection("posts").insertOne(postToSave);
   } catch (err) {
     thumbDeleter(thumbnail);
-    client.close();
+    await client.close();
     res.status(500).json({ success: false, message: "Error creating post!" });
     return;
   }
@@ -208,12 +208,12 @@ handler.post(upload.any(), async (req, res) => {
       );
   } catch (error) {
     thumbDeleter(thumbnail);
-    client.close();
+    await client.close();
     res.status(500).json({ success: false, message: "Error Updating User!" });
     return;
   }
 
-  client.close();
+  await client.close();
   res
     .status(201)
     .json({ success: true, message: "New Post Created!", post: postToSave });

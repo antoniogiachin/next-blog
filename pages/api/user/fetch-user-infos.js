@@ -1,14 +1,82 @@
-// proteggo rotta con token
-import { getToken } from "next-auth/jwt";
+// proteggo rotta con get unstable session
+import { connectToDatabase } from "../../../lib/db";
+import { unstable_getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
+// middleware
+import nextConnect from "next-connect";
 
-export default async function handler(req, res) {
-  const token = await getToken({ req }, process.nextTick.APP_JWT_SECRET);
-  if (token) {
-    // Signed in
-    console.log("JSON Web Token", JSON.stringify(token, null, 2));
-  } else {
-    // Not Signed in
-    res.status(401).message("Unhautorized!");
+const handler = nextConnect();
+
+const connection = async () => {
+  let client;
+  let db;
+
+  try {
+    client = await connectToDatabase();
+    db = client.db();
+  } catch (err) {
+    await client.close();
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to connect to DB!" });
+    return;
   }
-  // const { email } = req.body;
-}
+
+  return { db, client };
+};
+
+handler.get(async (req, res) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  if (!session) {
+    thumbDeleter(thumbnail);
+    await client.close();
+    res.status(401).json({ success: false, message: "Unhautorized!" });
+    return;
+  }
+
+  const { db, client } = await connection();
+
+  const { user } = session;
+  console.log(user);
+  const email = user.email;
+
+  const agg = [
+    {
+      $lookup: {
+        from: "posts",
+        localField: "ObjectId",
+        foreignField: "ObjectId",
+        as: "posts",
+      },
+    },
+    {
+      $match: {
+        email: email,
+      },
+    },
+  ];
+
+  let userRes;
+  try {
+    const collection = db.collection("users");
+    const cursor = collection.aggregate(agg);
+    userRes = await cursor.toArray();
+  } catch (err) {
+    await client.close();
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch user infos!" });
+  }
+
+  await client.close();
+  delete userRes.password;
+
+  res.status(200).json({
+    success: true,
+    message: "All infos fetched!",
+    user: userRes,
+  });
+});
+
+export default handler;

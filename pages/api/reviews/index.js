@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     client = await connectToDatabase();
     db = client.db();
   } catch (err) {
-    client.close();
+    await client.close();
     res
       .status(500)
       .json({ success: false, message: "Failed to connect to DB!" });
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const token = await getToken({ req }, process.nextTick.APP_JWT_SECRET);
 
     if (!token) {
-      client.close();
+      await client.close();
       res.status(401).json({ success: false, message: "Unhautorized!" });
       return;
     }
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     try {
       createReview = await db.collection("reviews").insertOne(reviewToInsert);
     } catch (err) {
-      client.close();
+      await client.close();
       res
         .status(500)
         .json({ success: false, message: "Failed to create new review!" });
@@ -58,14 +58,14 @@ export default async function handler(req, res) {
           { $push: { reviews: createReview.insertedId } }
         );
     } catch (err) {
-      client.close();
+      await client.close();
       res
         .status(500)
         .json({ success: false, message: "Failed to create new review!" });
       return;
     }
 
-    client.close();
+    await client.close();
 
     res.status(201).json({
       success: true,
@@ -87,14 +87,14 @@ export default async function handler(req, res) {
           { $set: { reactions: { thumbUp, thumbsDown, heart } } }
         );
     } catch (err) {
-      client.close();
+      await client.close();
       res
         .status(500)
         .json({ success: false, message: "Error Updating Review" });
       return;
     }
 
-    client.close();
+    await client.close();
     res.status(200).json({
       success: true,
       message: "Review Successfully Updated!",
