@@ -68,6 +68,8 @@ handler.get(async (req, res) => {
     return;
   }
 
+  await client.close();
+
   res.status(200).json({
     success: true,
     message: "All posts Fetch!",

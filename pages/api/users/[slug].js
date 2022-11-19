@@ -8,13 +8,34 @@ const handler = nextConnect();
 handler.get(async (req, res) => {
   const { db, client } = await connection();
 
-  let users;
+  const { query } = req;
+  const slug = query.slug;
+
+  const agg = [
+    {
+      $lookup: {
+        from: "posts",
+        localField: "ObjectId",
+        foreignField: "ObjectId",
+        as: "posts",
+      },
+    },
+    {
+      $match: {
+        slug: slug,
+      },
+    },
+    {
+      $unset: "password",
+    },
+  ];
+
+  let usersRes;
   try {
-    users = await db
-      .collection("users")
-      .find()
-      .project({ name: 1, surname: 1, posts: 1, email: 1 })
-      .toArray();
+    const collection = db.collection("users");
+    const cursor = collection.aggregate(agg);
+    usersRes = await cursor.toArray();
+    console.log(usersRes);
   } catch (err) {
     await client.close();
     res
@@ -28,7 +49,7 @@ handler.get(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "All posts Fetch!",
-    users,
+    usersRes,
   });
 });
 
