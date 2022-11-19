@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../../../lib/db";
+import { connection } from "../../../lib/db";
 import { hashPassword } from "../../../lib/auth/bcrypt-util";
 
 export default async function handler(req, res) {
@@ -66,8 +66,7 @@ export default async function handler(req, res) {
       password: hashedPassword,
     };
 
-    const client = await connectToDatabase();
-    const db = client.db();
+    const { db, client } = await connection();;
 
     // user exists check
     const exist = await db.collection("users").findOne({ email });

@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import multer from "multer";
 // proteggo rotta con get unstable session
-import { connectToDatabase } from "../../../lib/db";
+import { connection } from "../../../lib/db";
 import { unstable_getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]";
 // middleware
@@ -51,24 +51,6 @@ const thumbDeleter = (path) => {
 };
 
 const upload = multer({ storage, fileFilter });
-
-const connection = async () => {
-  let client;
-  let db;
-
-  try {
-    client = await connectToDatabase();
-    db = client.db();
-  } catch (err) {
-    await client.close();
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to connect to DB!" });
-    return;
-  }
-
-  return { db, client };
-};
 
 handler.get(async (req, res) => {
   const { db, client } = await connection();

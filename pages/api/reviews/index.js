@@ -1,20 +1,9 @@
 // proteggo rotta con token
 import { getToken } from "next-auth/jwt";
-import { connectToDatabase } from "../../../lib/db";
+import { connection } from "../../../lib/db";
 
 export default async function handler(req, res) {
-  let client;
-  let db;
-  try {
-    client = await connectToDatabase();
-    db = client.db();
-  } catch (err) {
-    await client.close();
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to connect to DB!" });
-    return;
-  }
+  const { db, client } = await connection();
 
   if (req.method === "POST") {
     const token = await getToken({ req }, process.nextTick.APP_JWT_SECRET);

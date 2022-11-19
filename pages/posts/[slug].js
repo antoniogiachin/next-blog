@@ -1,6 +1,6 @@
 import { PostContainer } from "../../components/posts/post-container";
 
-import { connectToDatabase } from "../../lib/db";
+import { connection } from "../../lib/db";
 
 const SinglePostPage = ({ post }) => {
   return (
@@ -13,11 +13,11 @@ const SinglePostPage = ({ post }) => {
 export async function getStaticProps(context) {
   const postSlug = context.params.slug;
 
-  const client = await connectToDatabase();
-
-  const db = client.db();
+  const { db, client } = await connection();
 
   const post = await db.collection("posts").findOne({ slug: postSlug });
+
+  await client.close();
 
   return {
     props: { post: JSON.parse(JSON.stringify(post)) },
@@ -26,9 +26,7 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths() {
-  const client = await connectToDatabase();
-
-  const db = client.db();
+  const { db, client } = await connection();
 
   const posts = await db
     .collection("posts")
@@ -37,6 +35,8 @@ export async function getStaticPaths() {
     .toArray();
 
   const paths = posts.map((post) => ({ params: { slug: post.slug } }));
+
+  await client.close();
 
   return {
     paths: paths,

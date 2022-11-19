@@ -1,5 +1,5 @@
 import { PostList } from "../../components/posts/post-list";
-import { connectToDatabase } from "../../lib/db";
+import { connection } from "../../lib/db";
 
 export default function Posts({ posts }) {
   const toBeRendered = posts.map((post) => (
@@ -17,11 +17,11 @@ export default function Posts({ posts }) {
 }
 
 export async function getStaticProps() {
-  const client = await connectToDatabase();
-
-  const db = client.db();
+  const { db, client } = await connection();
 
   const allPosts = await db.collection("posts").find().toArray();
+
+  await client.close();
 
   return {
     props: {

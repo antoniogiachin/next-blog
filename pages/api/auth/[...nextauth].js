@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 // LIBS
 import { comparePassword } from "../../../lib/auth/bcrypt-util";
-import { connectToDatabase } from "../../../lib/db";
+import { connection } from "../../../lib/db";
 
 export const authOptions = {
   session: {
@@ -16,10 +16,7 @@ export const authOptions = {
       async authorize(credentials) {
         // logica personale
 
-        // connect to mongo per verifica email e password inserite
-        const client = await connectToDatabase();
-
-        const db = client.db();
+        const { db, client } = await connection();
 
         // trovo utente se esiste
         const findUserByEmail = await db
