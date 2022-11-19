@@ -19,7 +19,7 @@ import {
   SET_NOTIFICATION,
 } from "../../store/slicers/appStatusSlice";
 
-export const ReviewForm = ({ setShowReviewForm, postId }) => {
+export const ReviewForm = ({ handleWriteReview, postId }) => {
   const [title, setTitle] = useState("");
   const [vote, setVote] = useState(0);
   const [content, setContent] = useState("");
@@ -55,7 +55,7 @@ export const ReviewForm = ({ setShowReviewForm, postId }) => {
       })
     );
 
-    setShowReviewForm(false);
+    handleWriteReview("refetch");
   };
 
   const setRatingClick = (index) => {
