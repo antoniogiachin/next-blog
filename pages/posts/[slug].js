@@ -15,12 +15,30 @@ export async function getStaticProps(context) {
 
   const { db, client } = await connection();
 
-  const post = await db.collection("posts").findOne({ slug: postSlug });
+  const agg = [
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "ObjectID",
+        foreignField: "ObjectID",
+        as: "reviews",
+      },
+    },
+    {
+      $match: {
+        slug: postSlug,
+      },
+    },
+  ];
+
+  const collection = db.collection("posts");
+  const cursor = collection.aggregate(agg);
+  const post = await cursor.toArray();
 
   await client.close();
 
   return {
-    props: { post: JSON.parse(JSON.stringify(post)) },
+    props: { post: JSON.parse(JSON.stringify(post[0])) },
     revalidate: 30,
   };
 }

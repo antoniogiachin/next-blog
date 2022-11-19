@@ -3,7 +3,7 @@ import { connection } from "../../lib/db";
 
 export default function Posts({ posts }) {
   const toBeRendered = posts.map((post) => (
-    <PostList key={post.id} post={post} />
+    <PostList key={post._id} post={post} />
   ));
 
   return (

@@ -8,6 +8,8 @@ import { faStar as emptyStar } from "@fortawesome/free-regular-svg-icons";
 import { faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import { faPlaneCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
+import { useApi } from "../../hooks/useApi";
+
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,26 +19,43 @@ import {
   SET_NOTIFICATION,
 } from "../../store/slicers/appStatusSlice";
 
-export const ReviewForm = () => {
+export const ReviewForm = ({ setShowReviewForm, postId }) => {
   const [title, setTitle] = useState("");
   const [vote, setVote] = useState(0);
   const [content, setContent] = useState("");
 
   const dispatch = useDispatch();
+  const { postApi } = useApi();
   const isLoading = useSelector(isLoadingStatus);
 
-  const handleSendReview = (event) => {
+  const handleSendReview = async (event) => {
     event.preventDefault();
 
     dispatch(SET_LOADING_STATUS(true));
 
     if (!title || !vote || !content) {
-      dispatch(SET_LOADING_STATUS(true));
+      dispatch(SET_LOADING_STATUS(false));
       dispatch(SET_ERROR("All field are required!"));
       return;
     }
 
-    // send ...
+    const reviewTosave = {
+      title,
+      vote,
+      content,
+      postId,
+    };
+
+    await postApi("/api/reviews", reviewTosave);
+    dispatch(
+      SET_NOTIFICATION({
+        show: true,
+        severity: "success",
+        text: "Review Successfully posted!",
+      })
+    );
+
+    setShowReviewForm(false);
   };
 
   const setRatingClick = (index) => {
@@ -102,7 +121,7 @@ export const ReviewForm = () => {
       </div>
       <div className={classes.actions}>
         <TheButton
-          isLoading={false}
+          isLoading={isLoading}
           disabledProps={!title || !content}
           label="Send Review"
           icon={faPlaneCircleCheck}

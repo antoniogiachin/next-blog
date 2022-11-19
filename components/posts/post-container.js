@@ -3,6 +3,8 @@ import { TheButton } from "../UI/the-button";
 
 import classes from "./post-container.module.css";
 
+import { useApi } from "../../hooks/useApi";
+
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -16,11 +18,24 @@ import Image from "next/image";
 export const PostContainer = ({ post }) => {
   const [showReviews, setShowReviews] = useState(false);
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [fetchedReviews, setFetchedReview] = useState([]);
 
-  const handleShowReviews = () => {
+  const { getApi } = useApi();
+
+  const handleShowReviews = async () => {
+    if (!showReviews) {
+      // fetch reviews
+      const { reviews } = await getApi(`/api/reviews/${post._id}`);
+      setFetchedReview(reviews);
+    }
     setShowReviews((prevShowState) => !prevShowState);
   };
-  const handleWriteReview = () => {
+
+  const handleWriteReview = async (mode = "standard") => {
+    if (mode === "refetch") {
+      const { reviews } = await getApi(`/api/reviews/${post._id}`);
+      setFetchedReview(reviews);
+    }
     setShowReviewForm((prevShowReviewForm) => !prevShowReviewForm);
   };
 
@@ -48,12 +63,12 @@ export const PostContainer = ({ post }) => {
       </div>
       {showReviewForm && (
         <div className={classes["review-form-container"]}>
-          <ReviewForm />
+          <ReviewForm handleWriteReview={handleWriteReview} postId={post._id} />
         </div>
       )}
       {showReviews && (
         <div className={classes["review-container"]}>
-          <ReviewList reviews={post.reviews} />
+          <ReviewList reviews={post.reviews} fetchedReviews={fetchedReviews} />
         </div>
       )}
     </article>

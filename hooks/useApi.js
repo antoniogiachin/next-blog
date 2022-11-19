@@ -39,7 +39,9 @@ export const useApi = () => {
       options = {
         method: "POST",
         body: JSON.stringify(payload),
-        "Content-Type": "application/json",
+        headers: {
+          "Content-Type": "application/json",
+        },
       };
     }
     let data;
