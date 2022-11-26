@@ -1,4 +1,3 @@
-import React from "react";
 import classes from "./review-container.module.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,8 +6,21 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 import { faThumbsDown } from "@fortawesome/free-regular-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-export const ReviewContainer = ({ review }) => {
+import { useReactionSaveAndLimit } from "../../hooks/useReactionSaveAndLimit";
+
+export const ReviewContainer = ({ review, reviewFetcher }) => {
+  const {
+    whichIsLoading,
+    upCounter,
+    downCounter,
+    heCounter,
+    handleReactionSubmit,
+  } = useReactionSaveAndLimit(review, reviewFetcher);
+
+  console.log(upCounter, downCounter);
+
   let voteRendered = [...Array(5)].map((number, index) => (
     <FontAwesomeIcon
       key={index}
@@ -16,6 +28,10 @@ export const ReviewContainer = ({ review }) => {
       className={index < review.vote ? classes["star"] : ""}
     />
   ));
+
+  const handleSubmit = async (reaction) => {
+    await handleReactionSubmit(reaction);
+  };
 
   return (
     <article className={classes["review-container"]}>
@@ -26,16 +42,52 @@ export const ReviewContainer = ({ review }) => {
       <div className={classes["vote"]}>
         <span>{voteRendered}</span>
         <div className={classes["reaction-container"]}>
-          <div className={classes["reaction"]}>
-            <FontAwesomeIcon icon={faThumbsUp} />
+          <div
+            onClick={() => {
+              handleSubmit("thumbUp");
+            }}
+            className={`${classes["reaction"]} ${
+              classes[upCounter === 0 ? "reaction-av" : "reaction-dis"]
+            }`}
+          >
+            {whichIsLoading === "thumbUp" && (
+              <FontAwesomeIcon className="fa-spin" icon={faSpinner} />
+            )}
+            {whichIsLoading !== "thumbUp" && (
+              <FontAwesomeIcon icon={faThumbsUp} />
+            )}
             <span>{review.reactions.thumbUp}</span>
           </div>
-          <div className={classes["reaction"]}>
-            <FontAwesomeIcon icon={faThumbsDown} />
+          <div
+            onClick={() => {
+              handleSubmit("thumbsDown");
+            }}
+            className={`${classes["reaction"]} ${
+              classes[downCounter === 0 ? "reaction-av" : "reaction-dis"]
+            }`}
+          >
+            {whichIsLoading === "thumbsDown" && (
+              <FontAwesomeIcon className="fa-spin" icon={faSpinner} />
+            )}
+            {whichIsLoading !== "thumbsDown" && (
+              <FontAwesomeIcon icon={faThumbsDown} />
+            )}
             <span>{review.reactions.thumbsDown}</span>
           </div>
-          <div className={classes["reaction"]}>
-            <FontAwesomeIcon icon={faHeart} />
+          <div
+            onClick={() => {
+              handleSubmit("heart");
+            }}
+            className={`${classes["reaction"]} ${
+              classes[heCounter === 0 ? "reaction-av" : "reaction-dis"]
+            }`}
+          >
+            {whichIsLoading === "heart" && (
+              <FontAwesomeIcon className="fa-spin" icon={faSpinner} />
+            )}
+            {whichIsLoading !== "thumbsDown" && (
+              <FontAwesomeIcon icon={faHeart} />
+            )}
             <span>{review.reactions.heart}</span>
           </div>
         </div>

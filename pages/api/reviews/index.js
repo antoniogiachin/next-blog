@@ -94,30 +94,4 @@ handler.post(async (req, res) => {
   });
 });
 
-handler.put(async (req, res) => {
-  const reviewId = req.params.id;
-  const { thumbUp, thumbsDown, heart } = req.body;
 
-  let reviewToUpdate;
-  try {
-    reviewToUpdate = await db
-      .collection("reviews")
-      .updateOne(
-        { _id: reviewId },
-        { $set: { reactions: { thumbUp, thumbsDown, heart } } }
-      );
-  } catch (err) {
-    await client.close();
-    res.status(500).json({ success: false, message: "Error Updating Review" });
-    return;
-  }
-
-  await client.close();
-  res.status(200).json({
-    success: true,
-    message: "Review Successfully Updated!",
-    review: reviewToUpdate,
-  });
-});
-
-export default handler;

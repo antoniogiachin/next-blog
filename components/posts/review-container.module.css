@@ -31,24 +31,46 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+}
+
+.review-container .vote .reaction-container .reaction-av {
   cursor: pointer;
 }
 
-.review-container .vote .reaction-container .reaction:hover {
+.review-container .vote .reaction-container .reaction-dis {
+  cursor: default;
+}
+
+.review-container .vote .reaction-container .reaction-av:hover {
   transform: scale(1.2);
 }
 
-.review-container .vote .reaction-container .reaction:nth-child(1):active {
+.review-container .vote .reaction-container .reaction-av:nth-child(1):active {
   transform: scale(1.2);
   color: green;
 }
 
-.review-container .vote .reaction-container .reaction:nth-child(2):active {
+.review-container .vote .reaction-container .reaction-dis:nth-child(1) {
+  transform: scale(1.2);
+  color: green;
+}
+
+.review-container .vote .reaction-container .reaction-av:nth-child(2):active {
   transform: scale(1.2);
   color: orange;
 }
 
-.review-container .vote .reaction-container .reaction:nth-child(3):active {
+.review-container .vote .reaction-container .reaction-dis:nth-child(2) {
+  transform: scale(1.2);
+  color: orange;
+}
+
+.review-container .vote .reaction-container .reaction-av:nth-child(3):active {
+  transform: scale(1.2);
+  color: red;
+}
+
+.review-container .vote .reaction-container .reaction-dis:nth-child(3) {
   transform: scale(1.2);
   color: red;
 }

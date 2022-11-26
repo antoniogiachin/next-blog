@@ -5,7 +5,6 @@ import { TheButton } from "../UI/the-button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as emptyStar } from "@fortawesome/free-regular-svg-icons";
-import { faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";
 import { faPlaneCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 import { useApi } from "../../hooks/useApi";

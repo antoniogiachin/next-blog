@@ -13,6 +13,9 @@ import { useState } from "react";
 import { ReviewForm } from "./review-form";
 import { ReviewList } from "./review-list";
 
+import { isLoadingStatus } from "../../store/slicers/appStatusSlice";
+import { useSelector } from "react-redux";
+
 import Image from "next/image";
 
 export const PostContainer = ({ post }) => {
@@ -21,6 +24,12 @@ export const PostContainer = ({ post }) => {
   const [fetchedReviews, setFetchedReview] = useState([]);
 
   const { getApi } = useApi();
+  const isLoading = useSelector(isLoadingStatus);
+
+  const reviewFetcher = async () => {
+    const { reviews } = await getApi(`/api/reviews/${post._id}`);
+    setFetchedReview(reviews);
+  };
 
   const handleShowReviews = async () => {
     if (!showReviews) {
@@ -33,8 +42,7 @@ export const PostContainer = ({ post }) => {
 
   const handleWriteReview = async (mode = "standard") => {
     if (mode === "refetch") {
-      const { reviews } = await getApi(`/api/reviews/${post._id}`);
-      setFetchedReview(reviews);
+      await reviewFetcher();
     }
     setShowReviewForm((prevShowReviewForm) => !prevShowReviewForm);
   };
@@ -50,9 +58,10 @@ export const PostContainer = ({ post }) => {
       <div className={classes["post-actions"]}>
         <TheButton
           funcToExecute={handleShowReviews}
+          isLoading={isLoading}
           label={showReviews ? "Close Reviews" : "Show Reviews"}
           icon={showReviews ? faXmark : faPlusCircle}
-          severity="success"
+          severity="info"
         />
         <TheButton
           funcToExecute={handleWriteReview}
@@ -68,7 +77,10 @@ export const PostContainer = ({ post }) => {
       )}
       {showReviews && (
         <div className={classes["review-container"]}>
-          <ReviewList reviews={post.reviews} fetchedReviews={fetchedReviews} />
+          <ReviewList
+            reviewFetcher={reviewFetcher}
+            reviews={fetchedReviews}
+          />
         </div>
       )}
     </article>
